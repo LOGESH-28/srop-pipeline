@@ -1,0 +1,44 @@
+# .dockerignore — files excluded from the Docker build context.
+#
+# Keeping the context small:
+#   • speeds up docker build (less to transfer to the daemon)
+#   • prevents secrets (.env) and local state (srop.db) from leaking into images
+
+# ── Virtual environment ────────────────────────────────────────────────────────
+.venv/
+venv/
+
+# ── Python bytecode ───────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
+.env
+
+# ── Local databases (must NOT be baked into the image) ────────────────────────
+srop.db
+srop_test.db
+*.db-shm
+*.db-wal
+
+# ── Local vector store ────────────────────────────────────────────────────────
+vector_store/
+test_vector_store/
+
+# ── Test artefacts ────────────────────────────────────────────────────────────
+.pytest_cache/
+htmlcov/
+.coverage
+
+# ── Editor / OS noise ─────────────────────────────────────────────────────────
+.git/
+.gitignore
+.DS_Store
+Thumbs.db
+*.swp
+
+# ── Documentation source (not needed at runtime) ──────────────────────────────
+docs/
+README.md

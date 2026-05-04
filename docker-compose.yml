@@ -1,0 +1,44 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "8000:8000"
+
+    # ── Persistent storage ─────────────────────────────────────────────────────
+    # ./data/ on the host is bind-mounted to /data inside the container.
+    # This directory holds:
+    #   /data/srop.db          — SQLite database (survives container restart)
+    #   /data/vector_store/    — ChromaDB persistent index (survives restart)
+    #
+    # Create it before first run:
+    #   mkdir -p ./data
+    volumes:
+      - ./data:/data
+
+    # ── Environment ────────────────────────────────────────────────────────────
+    # .env is loaded first; the explicit environment block overrides the paths
+    # so they point inside the container's /data volume rather than the host CWD.
+    env_file:
+      - .env
+
+    environment:
+      # sqlite+aiosqlite:////data/srop.db  (4 slashes = absolute path)
+      DATABASE_URL: "sqlite+aiosqlite:////data/srop.db"
+      VECTOR_STORE_PATH: "/data/vector_store"
+
+    # ── Health check ───────────────────────────────────────────────────────────
+    # curl is installed in the Dockerfile so this works without extra images.
+    # Docker marks the container "healthy" only after this passes, which lets
+    # downstream services (future: worker, ingestion job) wait on it.
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+    # ── Restart policy ─────────────────────────────────────────────────────────
+    restart: unless-stopped

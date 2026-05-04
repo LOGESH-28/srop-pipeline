@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+.venv_test/
+.venv_verify/
+
+# Env files
+.env
+
+# DB
+*.db
+
+# Vector stores
+vector_store/
+vectorstore/
+test_vector_store/
+
+# Logs
+*.log
+pip_output.txt
+
+# Temp / test files
+*.json
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
