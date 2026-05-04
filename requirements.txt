@@ -9,7 +9,6 @@ anyio==4.13.0
 async-timeout==5.0.1
 attrs==26.1.0
 Authlib==1.7.0
-backports.asyncio.runner==1.2.0
 bcrypt==5.0.0
 build==1.5.0
 certifi==2026.4.22
